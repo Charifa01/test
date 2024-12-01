@@ -102,13 +102,12 @@ export const salesByCategory = async (req: Request, res: Response, next: NextFun
       $group: {
         _id: "$Products.Category", 
         totalSales: { $sum: "$TotalAmount"},
-        count: { $sum: 1 }
       },
      },
      {
         $group: {
-          _id: null, // Regrouper tous les résultats pour calculer le total
-          categories: { $push: { category: "$_id", totalSales: "$totalSales", count: "$count" } },
+          _id: null, 
+          categories: { $push: { category: "$_id", totalSales: "$totalSales" } },
           totalSales: { $sum: "$totalSales" }, // Total des ventes
         },
       },
@@ -120,10 +119,9 @@ export const salesByCategory = async (req: Request, res: Response, next: NextFun
           _id: 0,
           category: "$categories.category",
           totalSales: "$categories.totalSales",
-          count: "$categories.count",
           percentage: {
             $multiply: [
-              { $divide: ["$categories.totalSales", "$totalSales"] }, // Calculer le pourcentage
+              { $divide: ["$categories.totalSales", "$totalSales"] }, 
               100,
             ],
           },

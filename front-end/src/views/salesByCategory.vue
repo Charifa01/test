@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { salesByCategory } from '../utils/apiRoutes';
 import { getProducts } from '../utils/apiRoutes';
+import histogramme from '../components/histogramme.vue';
 import axios from 'axios';
 import * as ChartJs from 'chart.js';
 const { Chart, registerables } = ChartJs;
@@ -29,17 +30,8 @@ const fetchData = async ()=>{
        isLoading.value = false; 
       }
 }
-const salesData= ref([])
-const fetchSalesData = async ()=>{
-    try {
-        const response = await axios.get(getProducts);
-        salesData.value = response.data;
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-}
+
 onMounted(() => { 
-  fetchSalesData();
   fetchData();
 });
 const chartData = computed(() => ({
@@ -54,25 +46,14 @@ const chartData = computed(() => ({
   ],
 }));
 
-
-const VentesParProduit= computed(() => ({
-  labels: salesData.value.map((item) => item.Products.ProductName),
-  datasets: [
-    {
-      label: 'Les ventes par produit ',
-      data: salesData.value.map((item) => item.totalSales),
-      backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
-      hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
-    },
-  ],
-}));
 </script>
 
 <template>
     <div class="w-10/12 rounded min-h-5/6 mx-auto my-4 py-8 px-12">
-        <div class=" ">
+      <histogramme />
+        <div class="bg-white mt-10" >
             <div >
-                <h1 class="pt-5 pl-4 text-3xl font-bold mb-4 text-black">
+                <h1 class="pt-12 mt-4 pl-4 text-3xl font-bold mb-4 text-black">
                     Pourcentage des ventes dans chaque catégorie:
                 </h1>
                     <div class="p-4 flex justify-center items-center shadow-xl shadow-blue-gray-900/5 " style="width:975px; height:410px"  v-if="isLoading" >
@@ -86,15 +67,7 @@ const VentesParProduit= computed(() => ({
                     <PieChart :chart-data="chartData" :chart-options="chartOptions" />
                    </div>
            </div>
-           <div>
-                <h1 class="pt-10 pl-4 text-3xl font-bold mb-4 text-black">
-                    Les ventes par produit:
-                </h1>
-                <div class="pt-5 p-4 shadow-xl shadow-blue-gray-900/5 " style="width:975px">
-                    <BarChart :chart-data="VentesParProduit" :chart-options="chartOptions" />
-                </div>
-                
-           </div>
+           
         </div>
     </div>
   </template>

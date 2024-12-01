@@ -1,11 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-// Import your views
 import totalSales from '../views/totalSales.vue';
 import TopProducts from '../views/TopProducts.vue';
 import salesByCategory from '../views/salesByCategory.vue';
 import getProducts from '../views/getProducts.vue';
-import DashboardLayout from '../DashboardLayout.vue';
+import dashboardLayout from '../views/dashboardLayout.vue';
 
 
 
@@ -13,7 +12,12 @@ import DashboardLayout from '../DashboardLayout.vue';
 const routes = [
   {
     path: '/',
+    redirect : '/dashboard',
     children: [
+      {
+        path: '/dashboard',
+        component: dashboardLayout,
+      },
       {
         path: '/total_sales',
         component: totalSales,
