@@ -8,7 +8,7 @@
 
 ### Lancer l'application front-end
 1. Naviguez dans le dossier `front-end` :
-   ```bash cd front-end
+    cd front-end
 2. Installez les dépendances :
    npm install
 3. Démarrez l'application :
